@@ -6,7 +6,7 @@ class AuthorsController < ApplicationController
     end
 
     def show
-        author = find_by(id: params[:id])
+        author = Author.find_by(id: params[:id])
         if author
             render json: author, status: :ok
         else
@@ -23,6 +23,6 @@ class AuthorsController < ApplicationController
     private
 
     def author_params
-        params.permit(:firstname, :last_name, :email :phone)
+        params.permit(:firstname, :lastname, :email, :phone)
     end
 end
