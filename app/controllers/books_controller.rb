@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
     def index
         author = Book.all
-        render json: author, except: [:created_at, :updated_at], status: :ok
+        render json: author, status: :ok
     end
 
     def show
