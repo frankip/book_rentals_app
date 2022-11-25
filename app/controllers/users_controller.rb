@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 
+    rescue_from ActiveRecord::RecordInvalid, with: :render_failed_create_record
+    
     def index
         author = User.all
         render json: author, status: :ok
@@ -12,13 +14,13 @@ class UsersController < ApplicationController
     end
 
     def create
-        user = User.create(user_params)
+        user = User.create!(user_params)
         render json: user, status: :created
     end
 
     def update
         user = find_user
-        user.update(user_params)
+        user.update!(user_params)
         render json: user, status: :ok
     end
 
@@ -41,5 +43,9 @@ class UsersController < ApplicationController
 
     def find_user
         User.find(params[:id])
+    end
+
+    def render_failed_create_record(invalid)
+        render json: {errors: invalid.record.errors }, status: :unprocessable_entity
     end
 end

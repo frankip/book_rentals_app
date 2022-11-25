@@ -1,5 +1,10 @@
 class AuthorsController < ApplicationController
+    # record not found
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+
+    # instance not created
+    rescue_from ActiveRecord::RecordInvalid, with: :render_failed_create_record
+
 
     # GET /author
     def index
@@ -19,14 +24,14 @@ class AuthorsController < ApplicationController
 
     # POST /authors
     def create
-        author = Author.create(author_params)
+        author = Author.create!(author_params)
         render json: author, status: :created
     end
 
     # PATCH /author/:id
     def update
         author = find_author
-        author.update(author_params)
+        author.update!(author_params)
         render json: author
 
         # rescue ActiveRecord::RecordNotFound
@@ -54,6 +59,11 @@ class AuthorsController < ApplicationController
 
     def find_author
         Author.find(params[:id])
+    end
+    
+
+    def render_failed_create_record(invalid)
+        render json: {errors: invalid.record.errors }, status: :unprocessable_entity
     end
 end
 
