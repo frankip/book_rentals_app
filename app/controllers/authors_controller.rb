@@ -16,7 +16,7 @@ class AuthorsController < ApplicationController
     # GET /author/:id
     def show
         author = find_author
-        render json: author, status: :ok
+        render json: author, include: :books, status: :ok
         # rescue ActiveRecord::RecordNotFound
         #     render_not_found_response
 

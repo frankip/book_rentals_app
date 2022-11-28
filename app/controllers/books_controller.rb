@@ -10,7 +10,7 @@ class BooksController < ApplicationController
 
     def show
         book = find_book
-        render json: book, status: :ok
+        render json: book, include: :author, status: :ok
     end
 
     def create
@@ -32,7 +32,7 @@ class BooksController < ApplicationController
 
     private
     def book_params
-        params.permit(:title, :description)
+        params.permit(:title, :description, :author_id)
     end
 
     def render_not_found_response
